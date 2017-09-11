@@ -211,7 +211,6 @@ class Transition
 
             $this->stateMachine->setCurrentState($this->to);
             $this->stateMachine->dispatchEvent('state_machine.after', new Events\TransitionEvent($this));
-
         } catch (\Exception $e) {
             $toThrow = new TransitionFailed($this, $e);
 

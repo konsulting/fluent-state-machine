@@ -49,8 +49,8 @@ class StateMachineTest extends TestCase
         $data = [];
         $stateMachine = $this->getStateMachine();
         $stateMachine->addTransition('open')->from('closed')->to('open')->calls(function () use (&$data) {
-                $data[] = 'Opening';
-            });
+            $data[] = 'Opening';
+        });
         $stateMachine->transition('open');
 
         $this->assertEquals(['Opening'], $data);
@@ -61,8 +61,8 @@ class StateMachineTest extends TestCase
     {
         $stateMachine = $this->getStateMachineWithModel();
         $stateMachine->addTransition('open')->from('closed')->to('open')->calls(function ($model) {
-                $model->record = 'Opening up';
-            });
+            $model->record = 'Opening up';
+        });
         $stateMachine->transition('open');
 
         $this->assertEquals('Opening up', $stateMachine->getModel()->record);
