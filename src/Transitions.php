@@ -100,7 +100,8 @@ class Transitions implements Countable, IteratorAggregate
         }))[0] ?? null;
     }
 
-    public function count() {
+    public function count()
+    {
         return count($this->transitions);
     }
 

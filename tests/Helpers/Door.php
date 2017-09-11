@@ -4,7 +4,7 @@ namespace Tests\Helpers;
 
 class Door
 {
-    public    $state;
+    public $state;
     protected $stateMachine;
 
     public function __construct($state)
