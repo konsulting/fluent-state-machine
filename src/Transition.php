@@ -191,13 +191,13 @@ class Transition
      */
     public function apply(callable $callback = null, callable $failedCallback = null)
     {
-        if (! $this->isAvailable()) {
-            throw new TransitionFailed($this, new TransitionNotAvailable($this));
-        }
-
-        $this->stateMachine->dispatchEvent('state_machine.before', new Events\TransitionEvent($this));
-
         try {
+            if (!$this->isAvailable()) {
+                throw new TransitionFailed($this, new TransitionNotAvailable($this));
+            }
+
+            $this->stateMachine->dispatchEvent('state_machine.before', new Events\TransitionEvent($this));
+
             // Run the callback stored on this transition, if possible.
             $callable = $this->myCallable();
             if ($callable) {
@@ -210,6 +210,7 @@ class Transition
             }
 
             $this->stateMachine->setCurrentState($this->to);
+            $this->stateMachine->dispatchEvent('state_machine.after', new Events\TransitionEvent($this));
 
         } catch (\Exception $e) {
             $toThrow = new TransitionFailed($this, $e);
@@ -220,8 +221,6 @@ class Transition
 
             throw $toThrow;
         }
-
-        $this->stateMachine->dispatchEvent('state_machine.after', new Events\TransitionEvent($this));
     }
 
     /**
