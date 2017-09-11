@@ -13,7 +13,7 @@ class TransitionsTest extends TestCase
     public function itCanAddATransition()
     {
         $stateMachine = $this->getStateMachine();
-        $transitions = new Transitions;
+        $transitions = (new Transitions)->setStateMachine($stateMachine);
 
         $this->assertCount(0, $transitions);
 
@@ -26,7 +26,7 @@ class TransitionsTest extends TestCase
     public function itWillFindATransitionByNameOrRoute()
     {
         $stateMachine = $this->getStateMachine();
-        $transitions = new Transitions;
+        $transitions = (new Transitions)->setStateMachine($stateMachine);
 
         $open = (new Transition($stateMachine, 'open'))->from('closed')->to('open');
         $close = (new Transition($stateMachine, 'close'))->from('open')->to('closed');
@@ -43,7 +43,7 @@ class TransitionsTest extends TestCase
         $this->expectException(DuplicateTransitionName::class);
 
         $stateMachine = $this->getStateMachine();
-        $transitions = new Transitions;
+        $transitions = (new Transitions)->setStateMachine($stateMachine);
 
         $transitions->push(new Transition($stateMachine, 'open'));
         $transitions->push(new Transition($stateMachine, 'open'));
@@ -55,7 +55,7 @@ class TransitionsTest extends TestCase
         $this->expectException(DuplicateTransitionRoute::class);
 
         $stateMachine = $this->getStateMachine();
-        $transitions = new Transitions;
+        $transitions = (new Transitions)->setStateMachine($stateMachine);
 
         $transitions->push(new Transition($stateMachine, 'open'));
         $transitions->push(new Transition($stateMachine, 'close'));

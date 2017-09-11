@@ -8,8 +8,30 @@ use IteratorAggregate;
 
 class Transitions implements Countable, IteratorAggregate
 {
-    protected $transitions         = [];
-    protected $pushWithDefaultCall = true;
+    protected $transitions = [];
+    /**
+     * @var TransitionFactory $transitionFactory
+     */
+    protected $transitionFactory;
+
+    public function __construct(TransitionFactory $transitionFactory = null)
+    {
+        $this->setTransitionFactory($transitionFactory);
+    }
+
+    public function setTransitionFactory(TransitionFactory $transitionFactory = null)
+    {
+        $this->transitionFactory = $transitionFactory ?: new TransitionFactory;
+
+        return $this;
+    }
+
+    public function setStateMachine(StateMachine $stateMachine)
+    {
+        $this->transitionFactory->setStateMachine($stateMachine);
+
+        return $this;
+    }
 
     public function pushMany($transitions = [])
     {
@@ -20,13 +42,20 @@ class Transitions implements Countable, IteratorAggregate
         return $this;
     }
 
-    public function push(Transition $transition)
+    public function push(...$arguments)
     {
-        $this->transitions[] = $this->guardDuplicates(
-            $transition->useDefaultCall($this->pushWithDefaultCall)
-        );
+        $transition = $arguments[0] instanceof Transition
+            ? $arguments[0]
+            : $this->transitionFactory->make(...$arguments);
+
+        $this->transitions[] = $this->guardDuplicates($transition);
 
         return $this;
+    }
+
+    public function last()
+    {
+        return end($this->transitions);
     }
 
     protected function guardDuplicates(Transition $transition)
@@ -78,12 +107,5 @@ class Transitions implements Countable, IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->transitions);
-    }
-
-    public function pushWithDefaultCall($value)
-    {
-        $this->pushWithDefaultCall = $value;
-
-        return $this;
     }
 }

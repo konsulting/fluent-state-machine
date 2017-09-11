@@ -9,6 +9,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 class StateMachine
 {
     protected $states;
+    /**
+     * @var Transitions $transitions
+     */
     protected $transitions;
     protected $model;
     protected $currentState;
@@ -17,11 +20,19 @@ class StateMachine
      */
     protected $events;
 
-    public function __construct($states)
+    public function __construct($states, Transitions $transitions = null)
     {
-        $this->transitions = new Transitions;
+        $this->setTransitions($transitions);
         $this->setStates($states);
         $this->setCurrentState($states[0] ?? null);
+    }
+
+    public function setTransitions(Transitions $transitions = null)
+    {
+        $this->transitions = $transitions ?: new Transitions;
+        $this->transitions->setStateMachine($this);
+
+        return $this;
     }
 
     public function getStates()
@@ -79,18 +90,9 @@ class StateMachine
         return ! is_null($this->model);
     }
 
-    public function useDefaultCalls($value = true)
+    public function addTransition(...$arguments)
     {
-        $this->transitions->pushWithDefaultCall($value);
-
-        return $this;
-    }
-
-    public function addTransition($name)
-    {
-        $this->transitions->push($transition = new Transition($this, $name));
-
-        return $transition;
+        return $this->transitions->push(...$arguments)->last();
     }
 
     public function getTransitions()

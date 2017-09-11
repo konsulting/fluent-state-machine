@@ -4,6 +4,11 @@ namespace Konsulting\StateMachine;
 
 use Stringy\Stringy;
 
+/**
+ * @property-read string from
+ * @property-read string to
+ * @property-read string name
+ */
 class Transition
 {
     protected $stateMachine;
@@ -21,7 +26,7 @@ class Transition
 
     protected function guardName($name)
     {
-        if (! empty($name)) {
+        if (!empty($name)) {
             return $name;
         };
 
@@ -40,9 +45,16 @@ class Transition
         return (new static($stateMachine, $name))->from($from)->to($to)->calls($calls);
     }
 
+    public static function fluent(StateMachine $stateMachine, $name)
+    {
+        return new static($stateMachine, $name);
+    }
+
     public function calls($callable = null)
     {
-        $this->callable = is_callable($callable) ? $callable : $this->makeCallable($callable);
+        if ($callable) {
+            $this->callable = is_callable($callable) ? $callable : $this->makeCallable($callable);
+        }
 
         return $this;
     }
@@ -79,11 +91,6 @@ class Transition
         $this->from = $this->guardState($state);
 
         return $this;
-    }
-
-    public static function fluent(StateMachine $stateMachine, $name)
-    {
-        return new static($stateMachine, $name);
     }
 
     public function addTransition($name)

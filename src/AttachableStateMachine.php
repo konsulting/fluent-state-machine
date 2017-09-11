@@ -6,7 +6,7 @@ abstract class AttachableStateMachine extends StateMachine
 {
     public function __construct($model)
     {
-        $this->transitions = new Transitions;
+        parent::__construct(['default']);
         $this->setModel($model);
         $this->define();
     }
