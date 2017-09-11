@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Konsulting\StateMachine\Exceptions\TransitionFailed;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class StateMachineTest extends TestCase
@@ -37,6 +38,9 @@ class StateMachineTest extends TestCase
 
         $this->assertTrue($stateMachine->can('open'));
         $this->assertFalse($stateMachine->can('closed'));
+
+        $this->assertTrue($stateMachine->canTransitionTo('open'));
+        $this->assertFalse($stateMachine->canTransitionTo('closed'));
     }
 
     /** @test */
@@ -95,5 +99,75 @@ class StateMachineTest extends TestCase
             'state_machine.before.open',
             'state_machine.after.open',
         ], $heard);
+    }
+
+    /** @test **/
+    public function itWillRunACallback()
+    {
+        $state = 'I am closed';
+        $stateMachine = $this->getStateMachine();
+        $stateMachine->addTransition('open')->from('closed')->to('open');
+        $stateMachine->addTransition('close')->from('open')->to('closed');
+
+        $stateMachine->transition('open', function () use (&$state) {
+            $state = 'I am open';
+        });
+
+        $this->assertEquals('I am open', $state);
+    }
+
+    /** @test * */
+    public function aFailureDuringTransitionWillReturnThrowATransitionFailedException()
+    {
+        $this->expectException(TransitionFailed::class);
+
+        $stateMachine = $this->getStateMachine();
+        $stateMachine->addTransition('open')->from('closed')->to('open');
+        $stateMachine->addTransition('close')->from('open')->to('closed');
+
+        $stateMachine->transition('open', function () {
+            throw new \Exception;
+        });
+    }
+
+    /** @test * */
+    public function itWillRunAFailedCallback()
+    {
+        $state = 'I am closed';
+        $exception = null;
+
+        $stateMachine = $this->getStateMachine();
+        $stateMachine->addTransition('open')->from('closed')->to('open');
+        $stateMachine->addTransition('close')->from('open')->to('closed');
+
+        $stateMachine->transition('open', function () use (&$state) {
+            throw new \Exception;
+        }, function ($e) use (&$state, &$exception) {
+            $state = 'I got stuck';
+        });
+
+        $this->assertEquals('I got stuck', $state);
+    }
+
+    /** @test **/
+    public function itWillTransitionToAStateIfPossible()
+    {
+        $stateMachine = $this->getStateMachine();
+        $stateMachine->addTransition('open')->from('closed')->to('open');
+
+        $stateMachine->transitionTo('open');
+
+        $this->assertEquals('open', $stateMachine->getCurrentState());
+    }
+
+    /** @test * */
+    public function itWillNotTransitionToAStateIfNotPossible()
+    {
+        $this->expectException(TransitionFailed::class);
+
+        $stateMachine = $this->getStateMachine();
+        $stateMachine->addTransition('open')->from('closed')->to('open');
+
+        $stateMachine->transitionTo('closed');
     }
 }

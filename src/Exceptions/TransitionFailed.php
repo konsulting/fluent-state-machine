@@ -9,9 +9,10 @@ class TransitionFailed extends StateMachineException
 {
     public $transition;
 
-    public function __construct(Transition $transition, Exception $exception)
+    public function __construct(Transition $transition = null, Exception $exception)
     {
-        parent::__construct("Transition '{$transition->name}' failed", 1, $exception);
+        parent::__construct("Transition ".($transition->name ?? '')." failed", 1, $exception);
+
         $this->transition = $transition;
     }
 }

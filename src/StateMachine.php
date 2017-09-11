@@ -111,17 +111,32 @@ class StateMachine
         return !! $this->transitions->findByRoute($this->currentState, $state);
     }
 
-    public function transition($name, callable $callback = null)
+    public function transition($name, callable $callback = null, callable $failedCallback = null)
     {
-        $transition = $this->transitions->findByName($name);
+        $transition = $name instanceof Transition ? $name : $this->transitions->findByName($name);
 
         if (! $transition) {
-            throw new Exceptions\TransitionNotFound($name);
+            throw new Exceptions\TransitionFailed(
+                null,
+                new Exceptions\TransitionNotFound($name)
+            );
         }
 
-        $transition->apply($callback);
+        return $transition->apply($callback, $failedCallback);
+    }
 
-        return $this;
+    public function transitionTo($state, callable $callback = null, callable $failedCallback = null)
+    {
+        $transition = $this->transitions->findByRoute($this->currentState, $state);
+
+        if (!$transition) {
+            throw new Exceptions\TransitionFailed(
+                null,
+                new Exceptions\TransitionNotFound("{$this->currentState}' to '{$state}")
+            );
+        }
+
+        return $transition->apply($callback, $failedCallback);
     }
 
     public function getCallbackArguments()

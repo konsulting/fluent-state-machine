@@ -128,7 +128,7 @@ class Transition
         }
     }
 
-    public function apply(callable $callback = null)
+    public function apply(callable $callback = null, callable $failedCallback = null)
     {
         if (! $this->isAvailable()) {
             throw new Exceptions\TransitionNotAvailable($this);
@@ -146,7 +146,13 @@ class Transition
             }
             $this->stateMachine->setCurrentState($this->to);
         } catch (\Exception $e) {
-            throw new Exceptions\TransitionFailed($this, $e);
+            $toThrow = new Exceptions\TransitionFailed($this, $e);
+
+            if ($failedCallback) {
+                return $failedCallback($toThrow);
+            }
+
+            throw $toThrow;
         }
 
         $this->stateMachine->dispatchEvent('state_machine.after', new Events\TransitionEvent($this));
