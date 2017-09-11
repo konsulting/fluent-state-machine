@@ -42,11 +42,11 @@ class Transitions implements Countable, IteratorAggregate
         return $this;
     }
 
-    public function push(...$arguments)
+    public function push($name, ...$arguments)
     {
-        $transition = $arguments[0] instanceof Transition
-            ? $arguments[0]
-            : $this->transitionFactory->make(...$arguments);
+        $transition = $name instanceof Transition
+            ? $name
+            : $this->transitionFactory->make($name, ...$arguments);
 
         $this->transitions[] = $this->guardDuplicates($transition);
 

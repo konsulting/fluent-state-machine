@@ -45,9 +45,9 @@ class StateMachine
         return $this;
     }
 
-    public function addTransition(...$arguments)
+    public function addTransition($name, ...$arguments)
     {
-        return $this->transitions->push(...$arguments)->last();
+        return $this->transitions->push($name, ...$arguments)->last();
     }
 
     public function getTransitions()

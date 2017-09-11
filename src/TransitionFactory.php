@@ -38,10 +38,10 @@ class TransitionFactory
      *
      * @return Transition
      */
-    public function make(...$arguments)
+    public function make($name, ...$arguments)
     {
         $this->guardStateMachine();
-        $arguments = array_merge([$this->stateMachine], $arguments);
+        $arguments = array_merge([$this->stateMachine], [$name], $arguments);
 
         if (count($arguments) != 2 || is_array($arguments[1])) {
             return $this->prepare(call_user_func_array([$this->transitionClass, 'declare'], $arguments));
