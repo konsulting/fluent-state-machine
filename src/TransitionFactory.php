@@ -15,6 +15,10 @@ class TransitionFactory
         $this->transitionClass = $transitionClass ?: $this->transitionClass;
     }
 
+    /**
+     * Control whether transitions should try to make a default callable
+     * using the transition name.
+     */
     public function useDefaultCall($value = true)
     {
         $this->useDefaultCall = $value;
@@ -28,6 +32,10 @@ class TransitionFactory
     }
 
     /**
+     * Construct a Transition based on the input. We can provide transitions built
+     * fluently (just the name), or constructed declaratively using an array,
+     * or a set of inputs (name, from, to, calls).
+     *
      * @return Transition
      */
     public function make(...$arguments)
@@ -42,6 +50,11 @@ class TransitionFactory
         return $this->prepare(call_user_func_array([$this->transitionClass, 'fluent'], $arguments));
     }
 
+    /**
+     * Make sure we have a StateMachine available to use when building Transitions.
+     *
+     * @throws StateMachineException
+     */
     protected function guardStateMachine()
     {
         if (!$this->stateMachine) {
@@ -49,6 +62,11 @@ class TransitionFactory
         }
     }
 
+    /**
+     * Routine to prepare a Transition before passing it back for use.
+     *
+     * @return Transition
+     */
     protected function prepare(Transition $transition)
     {
         return $transition->useDefaultCall($this->useDefaultCall);

@@ -8,10 +8,10 @@ use IteratorAggregate;
 
 class Transitions implements Countable, IteratorAggregate
 {
+    /** @var array */
     protected $transitions = [];
-    /**
-     * @var TransitionFactory $transitionFactory
-     */
+
+    /** @var TransitionFactory $transitionFactory */
     protected $transitionFactory;
 
     public function __construct(TransitionFactory $transitionFactory = null)

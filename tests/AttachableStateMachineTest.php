@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Konsulting\StateMachine\Exceptions\TransitionNotAvailable;
+use Konsulting\StateMachine\Exceptions\TransitionFailed;
 
 class AttachableStateMachineTest extends TestCase
 {
@@ -29,7 +29,7 @@ class AttachableStateMachineTest extends TestCase
     /** @test * */
     public function doorCannotClose()
     {
-        $this->expectException(TransitionNotAvailable::class);
+        $this->expectException(TransitionFailed::class);
 
         $door = new Helpers\Door('closed');
         $door->close();
