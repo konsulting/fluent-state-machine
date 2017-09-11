@@ -8,7 +8,8 @@ use IteratorAggregate;
 
 class Transitions implements Countable, IteratorAggregate
 {
-    protected $transitions = [];
+    protected $transitions         = [];
+    protected $pushWithDefaultCall = true;
 
     public function pushMany($transitions = [])
     {
@@ -21,7 +22,9 @@ class Transitions implements Countable, IteratorAggregate
 
     public function push(Transition $transition)
     {
-        $this->transitions[] = $this->guardDuplicates($transition);
+        $this->transitions[] = $this->guardDuplicates(
+            $transition->useDefaultCall($this->pushWithDefaultCall)
+        );
 
         return $this;
     }
@@ -75,5 +78,12 @@ class Transitions implements Countable, IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->transitions);
+    }
+
+    public function pushWithDefaultCall($value)
+    {
+        $this->pushWithDefaultCall = $value;
+
+        return $this;
     }
 }

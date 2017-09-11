@@ -4,7 +4,8 @@ namespace Tests\Helpers;
 
 class Door
 {
-    public $state;
+    public    $state;
+    protected $stateMachine;
 
     public function __construct($state)
     {
@@ -12,18 +13,17 @@ class Door
         $this->stateMachine = new AttachedStateMachine($this);
     }
 
-    public function transitionTo($state)
-    {
-        $this->stateMachine->apply($state);
-    }
-
     public function open()
     {
-
+        $this->stateMachine->transition('open', function () {
+            // echo "I am opening";
+        });
     }
 
     public function close()
     {
-
+        $this->stateMachine->transition('close', function () {
+            // echo "I am closing";
+        });
     }
 }

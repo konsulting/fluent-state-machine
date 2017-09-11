@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Konsulting\StateMachine\Exceptions\TransitionNotAvailable;
+
 class AttachableStateMachineTest extends TestCase
 {
     /** @test **/
@@ -11,20 +13,25 @@ class AttachableStateMachineTest extends TestCase
 
         $this->assertCount(2, $stateMachine->getTransitions());
         $this->assertEquals('closed', $stateMachine->getCurrentState());
-        $stateMachine->apply('open');
+        $stateMachine->transition('open');
         $this->assertEquals('open', $stateMachine->getCurrentState());
     }
 
     /** @test **/
-    public function doorTest()
+    public function doorCanOpen()
     {
         $door = new Helpers\Door('closed');
-        $door->transitionTo('open');
-
-        // would rather $door->open
-        // perhaps remove default calls setup, maybe the function should call to the SM transition
-        // could pass through a callback to complete, or we could check can and only set when completed.
+        $door->open();
 
         $this->assertEquals('open', $door->state);
+    }
+
+    /** @test * */
+    public function doorCannotClose()
+    {
+        $this->expectException(TransitionNotAvailable::class);
+
+        $door = new Helpers\Door('closed');
+        $door->close();
     }
 }

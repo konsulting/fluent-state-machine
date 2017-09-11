@@ -47,7 +47,7 @@ class StateMachineTest extends TestCase
         $stateMachine->addTransition('open')->from('closed')->to('open')->calls(function () use (&$data) {
                 $data[] = 'Opening';
             });
-        $stateMachine->apply('open');
+        $stateMachine->transition('open');
 
         $this->assertEquals(['Opening'], $data);
     }
@@ -59,7 +59,7 @@ class StateMachineTest extends TestCase
         $stateMachine->addTransition('open')->from('closed')->to('open')->calls(function ($model) {
                 $model->record = 'Opening up';
             });
-        $stateMachine->apply('open');
+        $stateMachine->transition('open');
 
         $this->assertEquals('Opening up', $stateMachine->getModel()->record);
     }
@@ -69,7 +69,7 @@ class StateMachineTest extends TestCase
     {
         $stateMachine = $this->getStateMachineWithModel();
         $stateMachine->addTransition('open')->from('closed')->to('open');
-        $stateMachine->apply('open');
+        $stateMachine->transition('open');
 
         $this->assertEquals('Opening', $stateMachine->getModel()->record);
     }
@@ -89,7 +89,7 @@ class StateMachineTest extends TestCase
             $heard[] = 'state_machine.after.' . $event->transition->name;
         });
 
-        $stateMachine->apply('open');
+        $stateMachine->transition('open');
 
         $this->assertEquals([
             'state_machine.before.open',

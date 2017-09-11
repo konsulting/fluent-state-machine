@@ -79,6 +79,13 @@ class StateMachine
         return ! is_null($this->model);
     }
 
+    public function useDefaultCalls($value = true)
+    {
+        $this->transitions->pushWithDefaultCall($value);
+
+        return $this;
+    }
+
     public function addTransition($name)
     {
         $this->transitions->push($transition = new Transition($this, $name));
@@ -91,21 +98,26 @@ class StateMachine
         return $this->transitions;
     }
 
-    public function can($transitionName)
+    public function can($name)
     {
-        return ($transition = $this->transitions->findByName($transitionName))
+        return ($transition = $this->transitions->findByName($name))
             && $transition->isAvailable();
     }
 
-    public function apply($transitionName)
+    public function canTransitionTo($state)
     {
-        $transition = $this->transitions->findByName($transitionName);
+        return !! $this->transitions->findByRoute($this->currentState, $state);
+    }
+
+    public function transition($name, callable $callback = null)
+    {
+        $transition = $this->transitions->findByName($name);
 
         if (! $transition) {
-            throw new Exceptions\TransitionNotFound($transitionName);
+            throw new Exceptions\TransitionNotFound($name);
         }
 
-        $transition->apply();
+        $transition->apply($callback);
 
         return $this;
     }

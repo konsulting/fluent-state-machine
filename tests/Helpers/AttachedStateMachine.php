@@ -10,6 +10,7 @@ class AttachedStateMachine extends AttachableStateMachine
     {
         $this->setStates(['closed', 'open'])
             ->setCurrentState($this->model->state ?? 'closed')
+            ->useDefaultCalls(false)
             ->addTransition('open')->from('closed')->to('open')
             ->addTransition('close')->from('open')->to('closed');
     }

@@ -11,6 +11,7 @@ class Transition
     protected $to;
     protected $callable;
     protected $name;
+    protected $useDefaultCallable = true;
 
     public function __construct(StateMachine $stateMachine, $name)
     {
@@ -102,9 +103,13 @@ class Transition
 
     protected function myCallable()
     {
+        if (! $this->useDefaultCallable) {
+            return $this->callable;
+        }
+
         $defaultCallable = $this->stateMachine->hasModel()
             ? $this->makeCallable($this->name)
-            : function () {};
+            : null;
 
         return $this->callable ?: $defaultCallable;
     }
@@ -116,7 +121,7 @@ class Transition
         }
     }
 
-    public function apply()
+    public function apply(callable $callback = null)
     {
         if (! $this->isAvailable()) {
             throw new Exceptions\TransitionNotAvailable($this);
@@ -125,7 +130,13 @@ class Transition
         $this->stateMachine->dispatchEvent('state_machine.before', new Events\TransitionEvent($this));
 
         try {
-            $this->myCallable()(...$this->stateMachine->getCallbackArguments());
+            $callable = $this->myCallable();
+            if ($callable) {
+                $callable(...$this->stateMachine->getCallbackArguments());
+            }
+            if ($callback) {
+                $callback();
+            }
             $this->stateMachine->setCurrentState($this->to);
         } catch (\Exception $e) {
             throw new Exceptions\TransitionFailed($this, $e);
@@ -137,5 +148,12 @@ class Transition
     public function isAvailable()
     {
         return $this->stateMachine->getCurrentState() == $this->from;
+    }
+
+    public function useDefaultCall($value = true)
+    {
+        $this->useDefaultCallable = !! $value;
+
+        return $this;
     }
 }
