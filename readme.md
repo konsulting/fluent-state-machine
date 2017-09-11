@@ -1,4 +1,4 @@
-# State Machine
+# Fluent State Machine
 
 A simple fluent implementation of a state machine. If you've ever battled with trying to control and report state for an object in your php project - a state machine will help.
 
@@ -71,7 +71,9 @@ As you will see, only the state machine retains the state information and we use
     echo $sm->getCurrentState(); // outputs open
     $sm->transition('close');    // outputs closing
     echo $sm->getCurrentState(); // outputs closed
+```
 
+```php
     class SimpleDoor
     {
         public function open()
