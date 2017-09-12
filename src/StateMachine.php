@@ -30,11 +30,10 @@ class StateMachine
      * through a Transitions object with a custom Transition Factory.
      * This allows us more control when constructing transitions.
      */
-    public function __construct(array $states, Transitions $transitions = null)
+    public function __construct(array $states = [], Transitions $transitions = null)
     {
         $this->setTransitions($transitions);
         $this->setStates($states);
-        $this->setCurrentState($states[0] ?? null);
     }
 
     public function setTransitions(Transitions $transitions = null)
@@ -55,9 +54,13 @@ class StateMachine
         return $this->transitions;
     }
 
+    /**
+     * Set the states for the machine. We always reset to the default when these change.
+     */
     public function setStates($states = [])
     {
         $this->states = $states;
+        $this->setToDefaultState();
 
         return $this;
     }
@@ -77,6 +80,11 @@ class StateMachine
         $this->currentState = $this->guardState($state);
 
         return $this;
+    }
+
+    public function setToDefaultState()
+    {
+        $this->currentState = $this->states[0] ?? null;
     }
 
     public function getCurrentState()
