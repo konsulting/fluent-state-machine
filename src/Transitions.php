@@ -60,12 +60,6 @@ class Transitions implements Countable, IteratorAggregate
 
     protected function guardDuplicates(Transition $transition)
     {
-        if ($this->findByName($transition->name)) {
-            throw new Exceptions\DuplicateTransitionName(
-                "Duplicate transition '{$transition->name}'"
-            );
-        }
-
         if ($this->findByRoute($transition->from, $transition->to)) {
             throw new Exceptions\DuplicateTransitionRoute(
                 "Duplicate transition from '{$transition->from}' to '{$transition->to}'"
@@ -76,8 +70,6 @@ class Transitions implements Countable, IteratorAggregate
     }
 
     /**
-     * @param $name
-     *
      * @return Transition | null
      */
     public function findByName($name)
@@ -88,9 +80,16 @@ class Transitions implements Countable, IteratorAggregate
     }
 
     /**
-     * @param $from
-     * @param $to
-     *
+     * @return Transition | null
+     */
+    public function findAvailableByName($name)
+    {
+        return array_values(array_filter($this->transitions, function ($transition) use ($name) {
+            return $transition->name == $name && $transition->isAvailable();
+        }))[0] ?? null;
+    }
+
+    /**
      * @return Transition | null
      */
     public function findByRoute($from, $to)

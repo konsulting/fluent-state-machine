@@ -3,6 +3,7 @@
 namespace Konsulting\StateMachine;
 
 use Konsulting\StateMachine\Exceptions\NoModelAvailableForMethod;
+use Konsulting\StateMachine\Exceptions\StateNotDefined;
 use Konsulting\StateMachine\Exceptions\TransitionFailed;
 use Konsulting\StateMachine\Exceptions\TransitionNotAvailable;
 use Konsulting\StateMachine\Exceptions\TransitionNotNamed;

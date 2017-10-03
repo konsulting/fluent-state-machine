@@ -120,12 +120,12 @@ class StateMachine
 
     /**
      * Check if a named transition is possible
-     *
+     **
      * @return bool
      */
     public function can($name)
     {
-        return ($transition = $this->transitions->findByName($name))
+        return ($transition = $this->transitions->findAvailableByName($name))
             && $transition->isAvailable();
     }
 
@@ -149,7 +149,7 @@ class StateMachine
      */
     public function transition($name, callable $callback = null, callable $failedCallback = null)
     {
-        $transition = $name instanceof Transition ? $name : $this->transitions->findByName($name);
+        $transition = $name instanceof Transition ? $name : $this->transitions->findAvailableByName($name);
 
         if (! $transition) {
             throw new TransitionFailed(
