@@ -23,6 +23,7 @@ class TransitionFactoryTest extends TestCase
             'from'  => 'open',
             'to'    => 'closed',
             'calls' => null,
+            'guard' => null,
         ], $transition->describe());
     }
 
@@ -38,6 +39,7 @@ class TransitionFactoryTest extends TestCase
             'from'  => 'open',
             'to'    => 'closed',
             'calls' => null,
+            'guard' => null,
         ], $transition->describe());
     }
 
