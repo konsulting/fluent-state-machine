@@ -39,7 +39,7 @@ class Transition
      */
     protected function guardName($name)
     {
-        if (! empty($name)) {
+        if ( ! empty($name)) {
             return $name;
         };
 
@@ -90,7 +90,7 @@ class Transition
     {
         $methodName = (string) Stringy::create($name)->camelize();
 
-        if (! $this->stateMachine->hasModel()) {
+        if ( ! $this->stateMachine->hasModel()) {
             throw new NoModelAvailableForMethod($methodName);
         }
 
@@ -143,23 +143,24 @@ class Transition
     public function describe()
     {
         return [
-            'name' => $this->name,
-            'from' => $this->from,
-            'to' => $this->to,
-            'calls' => $this->myCallable(),
+            'name'  => $this->name,
+            'from'  => $this->from,
+            'to'    => $this->to,
+            'calls' => $this->getTransitionCallable(),
         ];
     }
 
     /**
-     * Make the callable we're going to use at run-time. By default, it
-     * will try to build a default callable by using the transition
-     * name and the StateMachines model. This can be turned off.
+     * Get or make the callable that's attached to the transition. By default, if a callable has not been explicitly
+     * set it will try to build a default callable by using the transition name and the StateMachines model. This can
+     * be turned off.
      *
      * @return callable|null
+     * @throws NoModelAvailableForMethod
      */
-    protected function myCallable()
+    protected function getTransitionCallable()
     {
-        if (! $this->useDefaultCallable) {
+        if ( ! $this->useDefaultCallable) {
             return $this->callable;
         }
 
@@ -193,23 +194,13 @@ class Transition
     public function apply(callable $callback = null, callable $failedCallback = null)
     {
         try {
-            if (!$this->isAvailable()) {
+            if ( ! $this->isAvailable()) {
                 throw new TransitionFailed($this, new TransitionNotAvailable($this));
             }
 
             $this->stateMachine->dispatchEvent('state_machine.before', new Events\TransitionEvent($this));
-
-            // Run the callback stored on this transition, if possible.
-            $callable = $this->myCallable();
-            if ($callable) {
-                $callable(...$this->stateMachine->getArgumentsForCall());
-            }
-
-            // Run the callback that was passed through
-            if ($callback) {
-                $callback();
-            }
-
+            $this->runCallable($this->getTransitionCallable(), $this->stateMachine->getArgumentsForCall());
+            $this->runCallable($callback);
             $this->stateMachine->setCurrentState($this->to);
             $this->stateMachine->dispatchEvent('state_machine.after', new Events\TransitionEvent($this));
         } catch (\Exception $e) {
@@ -220,6 +211,20 @@ class Transition
             }
 
             throw $toThrow;
+        }
+    }
+
+    /**
+     * Run the given callable if it's valid.
+     *
+     * @param callable|null $callable
+     * @param array         $args
+     * @return mixed
+     */
+    protected function runCallable($callable, $args = [])
+    {
+        if (is_callable($callable)) {
+            return $callable(...$args);
         }
     }
 
@@ -236,7 +241,7 @@ class Transition
      */
     public function useDefaultCall($value = true)
     {
-        $this->useDefaultCallable = !! $value;
+        $this->useDefaultCallable = ! ! $value;
 
         return $this;
     }

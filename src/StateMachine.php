@@ -39,6 +39,10 @@ class StateMachine
         $this->setStates($states);
     }
 
+    /**
+     * @param TransitionBag|null $transitions
+     * @return $this
+     */
     public function setTransitionBag(TransitionBag $transitions = null)
     {
         $this->transitionBag = $transitions ?: new TransitionBag;
