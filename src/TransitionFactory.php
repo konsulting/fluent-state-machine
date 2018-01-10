@@ -36,7 +36,10 @@ class TransitionFactory
      * fluently (just the name), or constructed declaratively using an array,
      * or a set of inputs (name, from, to, calls).
      *
+     * @param       $name
+     * @param array $arguments
      * @return Transition
+     * @throws StateMachineException
      */
     public function make($name, ...$arguments)
     {

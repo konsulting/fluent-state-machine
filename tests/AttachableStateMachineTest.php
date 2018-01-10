@@ -11,7 +11,7 @@ class AttachableStateMachineTest extends TestCase
     {
         $stateMachine = new Helpers\AttachedStateMachine(new Helpers\TestModel);
 
-        $this->assertCount(2, $stateMachine->getTransitions());
+        $this->assertCount(2, $stateMachine->getTransitionBag());
         $this->assertEquals('closed', $stateMachine->getCurrentState());
         $stateMachine->transition('open');
         $this->assertEquals('open', $stateMachine->getCurrentState());

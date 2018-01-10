@@ -4,15 +4,15 @@ namespace Tests;
 
 use Konsulting\StateMachine\Exceptions\DuplicateTransitionRoute;
 use Konsulting\StateMachine\Transition;
-use Konsulting\StateMachine\Transitions;
+use Konsulting\StateMachine\TransitionBag;
 
-class TransitionsTest extends TestCase
+class TransitionBagTest extends TestCase
 {
     /** @test **/
     public function itCanAddATransition()
     {
         $stateMachine = $this->getStateMachine();
-        $transitions = (new Transitions)->setStateMachine($stateMachine);
+        $transitions = (new TransitionBag)->setStateMachine($stateMachine);
 
         $this->assertCount(0, $transitions);
 
@@ -25,7 +25,7 @@ class TransitionsTest extends TestCase
     public function itWillFindATransitionByNameOrRoute()
     {
         $stateMachine = $this->getStateMachine();
-        $transitions = (new Transitions)->setStateMachine($stateMachine);
+        $transitions = (new TransitionBag)->setStateMachine($stateMachine);
 
         $open = (new Transition($stateMachine, 'open'))->from('closed')->to('open');
         $close = (new Transition($stateMachine, 'close'))->from('open')->to('closed');
@@ -40,7 +40,7 @@ class TransitionsTest extends TestCase
     public function itWillFindAnAvailableTransitionByName()
     {
         $stateMachine = $this->getStateMachine()->setCurrentState('open');
-        $transitions = (new Transitions)->setStateMachine($stateMachine);
+        $transitions = (new TransitionBag)->setStateMachine($stateMachine);
 
         $open = (new Transition($stateMachine, 'open'))->from('closed')->to('open');
         $stayOpen = (new Transition($stateMachine, 'open'))->from('open')->to('open');
@@ -55,7 +55,7 @@ class TransitionsTest extends TestCase
     public function itWillAcceptTransitionsWithDuplicateNames()
     {
         $stateMachine = $this->getStateMachine();
-        $transitions = (new Transitions)->setStateMachine($stateMachine);
+        $transitions = (new TransitionBag)->setStateMachine($stateMachine);
 
         $transitions->push((new Transition($stateMachine, 'open'))->from('closed'));
         $transitions->push((new Transition($stateMachine, 'open')));
@@ -69,7 +69,7 @@ class TransitionsTest extends TestCase
         $this->expectException(DuplicateTransitionRoute::class);
 
         $stateMachine = $this->getStateMachine();
-        $transitions = (new Transitions)->setStateMachine($stateMachine);
+        $transitions = (new TransitionBag)->setStateMachine($stateMachine);
 
         $transitions->push(new Transition($stateMachine, 'open'));
         $transitions->push(new Transition($stateMachine, 'close'));

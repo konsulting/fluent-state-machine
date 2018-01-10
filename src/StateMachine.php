@@ -13,8 +13,8 @@ class StateMachine
     /** @var array $states */
     protected $states;
 
-    /** @var Transitions $transitions */
-    protected $transitions;
+    /** @var TransitionBag $transitionBag */
+    protected $transitionBag;
 
     /** @var mixed $model */
     protected $model;
@@ -27,31 +27,31 @@ class StateMachine
 
     /**
      * StateMachine constructor, set initial states and optionally pass
-     * through a Transitions object with a custom Transition Factory.
+     * through a TransitionBag object with a custom Transition Factory.
      * This allows us more control when constructing transitions.
      */
-    public function __construct(array $states = [], Transitions $transitions = null)
+    public function __construct(array $states = [], TransitionBag $transitions = null)
     {
-        $this->setTransitions($transitions);
+        $this->setTransitionBag($transitions);
         $this->setStates($states);
     }
 
-    public function setTransitions(Transitions $transitions = null)
+    public function setTransitionBag(TransitionBag $transitions = null)
     {
-        $this->transitions = $transitions ?: new Transitions;
-        $this->transitions->setStateMachine($this);
+        $this->transitionBag = $transitions ?: new TransitionBag;
+        $this->transitionBag->setStateMachine($this);
 
         return $this;
     }
 
     public function addTransition($name, ...$arguments)
     {
-        return $this->transitions->push($name, ...$arguments)->last();
+        return $this->transitionBag->push($name, ...$arguments)->last();
     }
 
-    public function getTransitions()
+    public function getTransitionBag()
     {
-        return $this->transitions;
+        return $this->transitionBag;
     }
 
     /**
@@ -125,7 +125,7 @@ class StateMachine
      */
     public function can($name)
     {
-        return ($transition = $this->transitions->findAvailableByName($name))
+        return ($transition = $this->transitionBag->findAvailableByName($name))
             && $transition->isAvailable();
     }
 
@@ -136,7 +136,7 @@ class StateMachine
      */
     public function canTransitionTo($state)
     {
-        return !! $this->transitions->findByRoute($this->currentState, $state);
+        return !! $this->transitionBag->findByRoute($this->currentState, $state);
     }
 
     /**
@@ -149,7 +149,7 @@ class StateMachine
      */
     public function transition($name, callable $callback = null, callable $failedCallback = null)
     {
-        $transition = $name instanceof Transition ? $name : $this->transitions->findAvailableByName($name);
+        $transition = $name instanceof Transition ? $name : $this->transitionBag->findAvailableByName($name);
 
         if (! $transition) {
             throw new TransitionFailed(
@@ -169,7 +169,7 @@ class StateMachine
      */
     public function transitionTo($state, callable $callback = null, callable $failedCallback = null)
     {
-        $transition = $this->transitions->findByRoute($this->currentState, $state);
+        $transition = $this->transitionBag->findByRoute($this->currentState, $state);
 
         if (!$transition) {
             throw new TransitionFailed(

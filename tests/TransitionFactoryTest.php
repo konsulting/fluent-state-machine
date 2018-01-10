@@ -5,12 +5,13 @@ namespace Tests;
 use Konsulting\StateMachine\Exceptions\StateMachineException;
 use Konsulting\StateMachine\StateMachine;
 use Konsulting\StateMachine\Transition;
+use Konsulting\StateMachine\TransitionBag;
 use Konsulting\StateMachine\TransitionFactory;
 use Konsulting\StateMachine\Transitions;
 
 class TransitionFactoryTest extends TestCase
 {
-    /** @test **/
+    /** @test * */
     public function itWillMakeATransitionFluently()
     {
         $factory = $this->getFactory();
@@ -18,9 +19,9 @@ class TransitionFactoryTest extends TestCase
 
         $this->assertInstanceOf(Transition::class, $transition);
         $this->assertEquals([
-            'name' => 'open',
-            'from' => 'open',
-            'to' => 'closed',
+            'name'  => 'open',
+            'from'  => 'open',
+            'to'    => 'closed',
             'calls' => null,
         ], $transition->describe());
     }
@@ -33,9 +34,9 @@ class TransitionFactoryTest extends TestCase
 
         $this->assertInstanceOf(Transition::class, $transition);
         $this->assertEquals([
-            'name' => 'open',
-            'from' => 'open',
-            'to' => 'closed',
+            'name'  => 'open',
+            'from'  => 'open',
+            'to'    => 'closed',
             'calls' => null,
         ], $transition->describe());
     }
@@ -51,8 +52,9 @@ class TransitionFactoryTest extends TestCase
 
     protected function getFactory()
     {
-        $transitions = new Transitions($factory = new TransitionFactory);
+        $transitions = new TransitionBag($factory = new TransitionFactory);
         new StateMachine(['closed', 'open'], $transitions);
+
         // $transitions StateMachine is set during the $stateMachine instantiation.
 
         return $factory;

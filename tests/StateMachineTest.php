@@ -18,12 +18,12 @@ class StateMachineTest extends TestCase
     {
         $stateMachine = $this->getStateMachine();
 
-        $this->assertCount(0, $stateMachine->getTransitions());
+        $this->assertCount(0, $stateMachine->getTransitionBag());
 
         $stateMachine->addTransition('open')->from('closed')->to('open');
         $stateMachine->addTransition('close')->from('open')->to('closed');
 
-        $this->assertCount(2, $stateMachine->getTransitions());
+        $this->assertCount(2, $stateMachine->getTransitionBag());
     }
 
     /** @test */
@@ -31,7 +31,7 @@ class StateMachineTest extends TestCase
     {
         $stateMachine = $this->getStateMachine();
 
-        $this->assertCount(0, $stateMachine->getTransitions());
+        $this->assertCount(0, $stateMachine->getTransitionBag());
 
         $stateMachine->addTransition('open')->from('closed')->to('open');
         $stateMachine->addTransition('close')->from('open')->to('closed');

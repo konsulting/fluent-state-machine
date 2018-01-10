@@ -4,16 +4,16 @@ namespace Tests\Helpers;
 
 use Konsulting\StateMachine\AttachableStateMachine;
 use Konsulting\StateMachine\TransitionFactory;
-use Konsulting\StateMachine\Transitions;
+use Konsulting\StateMachine\TransitionBag;
 
 class AttachedStateMachine extends AttachableStateMachine
 {
     protected function define()
     {
         $transitionFactory = (new TransitionFactory)->useDefaultCall(false);
-        $transitions = new Transitions($transitionFactory);
+        $transitions = new TransitionBag($transitionFactory);
 
-        $this->setTransitions($transitions)
+        $this->setTransitionBag($transitions)
             ->setStates(['closed', 'open'])
             ->setCurrentState($this->model->state ?? 'closed')
             ->addTransition('open')->from('closed')->to('open')
