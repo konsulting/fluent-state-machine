@@ -29,6 +29,9 @@ class StateMachine
      * StateMachine constructor, set initial states and optionally pass
      * through a TransitionBag object with a custom Transition Factory.
      * This allows us more control when constructing transitions.
+     *
+     * @param array              $states
+     * @param TransitionBag|null $transitions
      */
     public function __construct(array $states = [], TransitionBag $transitions = null)
     {
