@@ -149,8 +149,8 @@ class TransitionBag implements Countable, IteratorAggregate
     public function findByRoute($from, $to)
     {
         return array_values(array_filter($this->transitions, function ($transition) use ($from, $to) {
-                return $transition->from == $from && $transition->to == $to;
-            }))[0] ?? null;
+            return $transition->from == $from && $transition->to == $to;
+        }))[0] ?? null;
     }
 
     /**
