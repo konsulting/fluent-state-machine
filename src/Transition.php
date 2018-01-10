@@ -39,7 +39,7 @@ class Transition
      */
     protected function guardName($name)
     {
-        if ( ! empty($name)) {
+        if (! empty($name)) {
             return $name;
         };
 
@@ -90,7 +90,7 @@ class Transition
     {
         $methodName = (string) Stringy::create($name)->camelize();
 
-        if ( ! $this->stateMachine->hasModel()) {
+        if (! $this->stateMachine->hasModel()) {
             throw new NoModelAvailableForMethod($methodName);
         }
 
@@ -160,7 +160,7 @@ class Transition
      */
     protected function getTransitionCallable()
     {
-        if ( ! $this->useDefaultCallable) {
+        if (! $this->useDefaultCallable) {
             return $this->callable;
         }
 
@@ -194,7 +194,7 @@ class Transition
     public function apply(callable $callback = null, callable $failedCallback = null)
     {
         try {
-            if ( ! $this->isAvailable()) {
+            if (! $this->isAvailable()) {
                 throw new TransitionFailed($this, new TransitionNotAvailable($this));
             }
 
