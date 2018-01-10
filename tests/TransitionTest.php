@@ -70,7 +70,7 @@ class TransitionTest extends TestCase
     /** @test **/
     public function itWillBuildACallableFromAStringWhenAModelIsPresent()
     {
-        $transition = Transition::fluent($this->getStateMachine()->setModel(new Helpers\TestModel), 'open')
+        $transition = Transition::fluent($this->getStateMachine()->setModel(new Stubs\TestModel), 'open')
             ->from('closed')
             ->to('open')
             ->calls('open-door');
@@ -81,7 +81,7 @@ class TransitionTest extends TestCase
     /** @test * */
     public function itWillBuildACallableFromTheTransitionNameAModelIsPresent()
     {
-        $transition = Transition::fluent($this->getStateMachine()->setModel(new Helpers\TestModel), 'open')
+        $transition = Transition::fluent($this->getStateMachine()->setModel(new Stubs\TestModel), 'open')
             ->from('closed')
             ->to('open');
 

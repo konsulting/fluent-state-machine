@@ -20,7 +20,7 @@ class TestCase extends BaseTestCase
      */
     protected function getStateMachineWithModel($model = null)
     {
-        $model = $model ?: new Helpers\TestModel;
+        $model = $model ?: new Stubs\TestModel;
 
         return $this->getStateMachine()->setModel($model);
     }

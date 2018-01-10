@@ -9,7 +9,7 @@ class AttachableStateMachineTest extends TestCase
     /** @test **/
     public function itWillBuildAStateMachineAsDefined()
     {
-        $stateMachine = new Helpers\AttachedStateMachine(new Helpers\TestModel);
+        $stateMachine = new Stubs\AttachedStateMachine(new Stubs\TestModel);
 
         $this->assertCount(2, $stateMachine->getTransitionBag());
         $this->assertEquals('closed', $stateMachine->getCurrentState());
@@ -20,7 +20,7 @@ class AttachableStateMachineTest extends TestCase
     /** @test **/
     public function doorCanOpen()
     {
-        $door = new Helpers\Door('closed');
+        $door = new Stubs\Door('closed');
         $door->open();
 
         $this->assertEquals('open', $door->state);
@@ -31,7 +31,7 @@ class AttachableStateMachineTest extends TestCase
     {
         $this->expectException(TransitionFailed::class);
 
-        $door = new Helpers\Door('closed');
+        $door = new Stubs\Door('closed');
         $door->close();
     }
 }

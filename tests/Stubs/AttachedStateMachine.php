@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Helpers;
+namespace Tests\Stubs;
 
 use Konsulting\StateMachine\AttachableStateMachine;
 use Konsulting\StateMachine\TransitionFactory;
