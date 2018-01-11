@@ -3,6 +3,8 @@
 namespace Tests;
 
 use Konsulting\StateMachine\Exceptions\TransitionFailed;
+use Mockery;
+use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class StateMachineTest extends TestCase
@@ -169,5 +171,14 @@ class StateMachineTest extends TestCase
         $stateMachine->addTransition('open')->from('closed')->to('open');
 
         $stateMachine->transitionTo('closed');
+    }
+
+    /** @test */
+    public function itReturnsTheEventAfterFiring()
+    {
+        $stateMachine = $this->getStateMachine()->setEventDispatcher(new EventDispatcher);
+        $event = Mockery::mock(Event::class);
+
+        $this->assertEquals($event, $stateMachine->dispatchEvent('test', $event));
     }
 }
