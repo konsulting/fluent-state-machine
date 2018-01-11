@@ -11,7 +11,7 @@ use Konsulting\StateMachine\Transitions;
 
 class TransitionFactoryTest extends TestCase
 {
-    /** @test * */
+    /** @test */
     public function itWillMakeATransitionFluently()
     {
         $factory = $this->getFactory();
@@ -27,7 +27,7 @@ class TransitionFactoryTest extends TestCase
         ], $transition->describe());
     }
 
-    /** @test * */
+    /** @test */
     public function itWillMakeATransitionDeclaratively()
     {
         $factory = $this->getFactory();
@@ -43,7 +43,7 @@ class TransitionFactoryTest extends TestCase
         ], $transition->describe());
     }
 
-    /** @test * */
+    /** @test */
     public function itWontMakeATransitionWithoutAStateMachine()
     {
         $this->expectException(StateMachineException::class);

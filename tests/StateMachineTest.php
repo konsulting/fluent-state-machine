@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class StateMachineTest extends TestCase
 {
-    /** @test **/
+    /** @test */
     public function itCanHaveASetOfStates()
     {
         $this->assertEquals(['closed', 'open'], $this->getStateMachine()->getStates());
@@ -80,7 +80,7 @@ class StateMachineTest extends TestCase
         $this->assertEquals('Opening', $stateMachine->getModel()->record);
     }
 
-    /** @test **/
+    /** @test */
     public function itWillFireEvents()
     {
         $stateMachine = $this->getStateMachineWithModel()->setEventDispatcher($bus = new EventDispatcher);
@@ -103,7 +103,7 @@ class StateMachineTest extends TestCase
         ], $heard);
     }
 
-    /** @test **/
+    /** @test */
     public function itWillRunACallback()
     {
         $state = 'I am closed';
@@ -118,7 +118,7 @@ class StateMachineTest extends TestCase
         $this->assertEquals('I am open', $state);
     }
 
-    /** @test * */
+    /** @test */
     public function aFailureDuringTransitionWillReturnThrowATransitionFailedException()
     {
         $this->expectException(TransitionFailed::class);
@@ -132,7 +132,7 @@ class StateMachineTest extends TestCase
         });
     }
 
-    /** @test * */
+    /** @test */
     public function itWillRunAFailedCallback()
     {
         $state = 'I am closed';
@@ -151,7 +151,7 @@ class StateMachineTest extends TestCase
         $this->assertEquals('I got stuck', $state);
     }
 
-    /** @test **/
+    /** @test */
     public function itWillTransitionToAStateIfPossible()
     {
         $stateMachine = $this->getStateMachine();
@@ -162,7 +162,7 @@ class StateMachineTest extends TestCase
         $this->assertEquals('open', $stateMachine->getCurrentState());
     }
 
-    /** @test * */
+    /** @test */
     public function itWillNotTransitionToAStateIfNotPossible()
     {
         $this->expectException(TransitionFailed::class);

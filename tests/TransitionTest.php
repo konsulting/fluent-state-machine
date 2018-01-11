@@ -11,7 +11,7 @@ use Tests\Stubs\TestModel;
 
 class TransitionTest extends TestCase
 {
-    /** @test * */
+    /** @test */
     public function itMustHaveAName()
     {
         $this->expectException(TransitionNotNamed::class);
@@ -19,7 +19,7 @@ class TransitionTest extends TestCase
         new Transition($this->getStateMachine(), '');
     }
 
-    /** @test * */
+    /** @test */
     public function itCanBeBuiltFluently()
     {
         $transition = Transition::fluent($this->getStateMachine(), 'open')
@@ -38,7 +38,7 @@ class TransitionTest extends TestCase
         $this->assertEquals('Opening', $transition->describe()['calls']());
     }
 
-    /** @test * */
+    /** @test */
     public function itCanBeBuiltDeclaratively()
     {
         $transition = Transition::declare($this->getStateMachine(), [
@@ -59,7 +59,7 @@ class TransitionTest extends TestCase
         $this->assertEquals('Opening', $transition->describe()['calls']());
     }
 
-    /** @test * */
+    /** @test */
     public function itWontBuildACallableFromAStringWhenAModelIsAbsent()
     {
         $this->expectException(NoModelAvailableForMethod::class);
@@ -70,7 +70,7 @@ class TransitionTest extends TestCase
             ->calls('open-door');
     }
 
-    /** @test * */
+    /** @test */
     public function itWillBuildACallableFromAStringWhenAModelIsPresent()
     {
         $transition = Transition::fluent($this->getStateMachine()->setModel(new Stubs\TestModel), 'open')
@@ -81,7 +81,7 @@ class TransitionTest extends TestCase
         $this->assertEquals('Opening Door', $transition->describe()['calls']());
     }
 
-    /** @test * */
+    /** @test */
     public function itWillBuildACallableFromTheTransitionNameAModelIsPresent()
     {
         $transition = Transition::fluent($this->getStateMachine()->setModel(new Stubs\TestModel), 'open')

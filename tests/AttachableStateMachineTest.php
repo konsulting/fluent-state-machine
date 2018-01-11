@@ -6,7 +6,7 @@ use Konsulting\StateMachine\Exceptions\TransitionFailed;
 
 class AttachableStateMachineTest extends TestCase
 {
-    /** @test **/
+    /** @test */
     public function itWillBuildAStateMachineAsDefined()
     {
         $stateMachine = new Stubs\AttachedStateMachine(new Stubs\TestModel);
@@ -17,7 +17,7 @@ class AttachableStateMachineTest extends TestCase
         $this->assertEquals('open', $stateMachine->getCurrentState());
     }
 
-    /** @test **/
+    /** @test */
     public function doorCanOpen()
     {
         $door = new Stubs\Door('closed');
@@ -26,7 +26,7 @@ class AttachableStateMachineTest extends TestCase
         $this->assertEquals('open', $door->state);
     }
 
-    /** @test * */
+    /** @test */
     public function doorCannotClose()
     {
         $this->expectException(TransitionFailed::class);

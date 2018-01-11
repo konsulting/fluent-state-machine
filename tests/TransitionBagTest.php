@@ -8,7 +8,7 @@ use Konsulting\StateMachine\TransitionBag;
 
 class TransitionBagTest extends TestCase
 {
-    /** @test **/
+    /** @test */
     public function itCanAddATransition()
     {
         $stateMachine = $this->getStateMachine();
@@ -21,7 +21,7 @@ class TransitionBagTest extends TestCase
         $this->assertCount(1, $transitions);
     }
 
-    /** @test **/
+    /** @test */
     public function itWillFindATransitionByNameOrRoute()
     {
         $stateMachine = $this->getStateMachine();
@@ -36,7 +36,7 @@ class TransitionBagTest extends TestCase
         $this->assertEquals($open, $transitions->findByRoute('closed', 'open'));
     }
 
-    /** @test **/
+    /** @test */
     public function itWillFindAnAvailableTransitionByName()
     {
         $stateMachine = $this->getStateMachine()->setCurrentState('open');
@@ -51,7 +51,7 @@ class TransitionBagTest extends TestCase
         $this->assertEquals($stayOpen, $transitions->findAvailableByName('open'));
     }
 
-    /** @test **/
+    /** @test */
     public function itWillAcceptTransitionsWithDuplicateNames()
     {
         $stateMachine = $this->getStateMachine();
@@ -63,7 +63,7 @@ class TransitionBagTest extends TestCase
         $this->assertCount(2, $transitions);
     }
 
-    /** @test * */
+    /** @test */
     public function itWontAcceptTransitionsWithDuplicateRoutes()
     {
         $this->expectException(DuplicateTransitionRoute::class);
