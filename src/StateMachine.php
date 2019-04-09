@@ -154,7 +154,7 @@ class StateMachine
         if (! $transition) {
             throw new TransitionFailed(
                 null,
-                new TransitionNotFound($name)
+                new TransitionNotFound($name, $this->currentState)
             );
         }
 
