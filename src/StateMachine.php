@@ -2,10 +2,10 @@
 
 namespace Konsulting\StateMachine;
 
+use Symfony\Contracts\EventDispatcher\Event;
 use Konsulting\StateMachine\Exceptions\StateNotDefined;
 use Konsulting\StateMachine\Exceptions\TransitionFailed;
 use Konsulting\StateMachine\Exceptions\TransitionNotFound;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class StateMachine
@@ -207,7 +207,7 @@ class StateMachine
             return;
         }
 
-        $this->events->dispatch($name, $event);
+        $this->events->dispatch($event, $name);
     }
 
     /**

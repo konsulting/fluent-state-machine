@@ -3,7 +3,7 @@
 namespace Konsulting\StateMachine\Events;
 
 use Konsulting\StateMachine\Transition;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class TransitionEvent extends Event
 {

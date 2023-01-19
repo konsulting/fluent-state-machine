@@ -5,6 +5,7 @@ namespace Tests\Helpers;
 class TestModel
 {
     public $record;
+    public $state;
 
     public function openDoor()
     {
