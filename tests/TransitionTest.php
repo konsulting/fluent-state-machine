@@ -2,12 +2,15 @@
 
 namespace Tests;
 
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Konsulting\StateMachine\Exceptions\NoModelAvailableForMethod;
 use Konsulting\StateMachine\Exceptions\TransitionNotNamed;
 use Konsulting\StateMachine\Transition;
 
 class TransitionTest extends TestCase
 {
+    use ArraySubsetAsserts;
+
     /** @test **/
     public function itMustHaveAName()
     {
@@ -26,7 +29,7 @@ class TransitionTest extends TestCase
                 return "Opening";
             });
 
-        $this->assertArraySubset([
+        self::assertArraySubset([
             'name' => 'open',
             'from' => 'closed',
             'to' => 'open',
@@ -47,7 +50,7 @@ class TransitionTest extends TestCase
             }
         ]);
 
-        $this->assertArraySubset([
+        self::assertArraySubset([
             'name' => 'open',
             'from' => 'closed',
             'to' => 'open',
